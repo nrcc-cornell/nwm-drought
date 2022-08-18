@@ -3,6 +3,8 @@
 ## About this project
 National Water Model v2.1 soil moisture and streamflow output are used to assess drought conditions in the northeastern United States. NWM operational model output provides current conditions, while NWM retrospective simulation output (1979-2020) provides climatological context. The drought indices are calculated using the percentile of current conditions (soil moisture or streamflow) relative to historical conditions during the available NWM retrospective period. Drought index bins and color-coding follow those used by the National Drought Mitigation Center.
 
+Maps of these indices are available at: https://nedews.nrcc.cornell.edu/ .
+
 ## 1. Python environment
 Scripts in this project require a Python 2 environment with necessary dependencies. A conda yml file is provided (conda_env/nwm-drought.yml). To install this environment on Mac/Linux:
 
@@ -18,7 +20,9 @@ $ conda activate nwm-drought
 
 ## 2. Required shapefiles
 Three directories contain shapefiles used during map creation:
-'us_shapefile', 'world_shapefile' : for political boundaries
+
+'us_shapefile', 'world_shapefile' : for political boundaries (unzip if necessary)
+
 'NHDPlus' : regional stream reach information
 
 ## 3. NWM data management
