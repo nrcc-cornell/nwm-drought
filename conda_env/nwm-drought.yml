@@ -1,0 +1,19 @@
+name: nwm-drought
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - basemap-data-hires<1.3.0
+  - proj4
+  - netcdf4
+  - python=2.7
+  - basemap<1.3.0
+  - nco
+  - matplotlib
+  - scipy
+  - cartopy
+  - fiona
+  - requests
+  - numpy
+  - awscli
+
