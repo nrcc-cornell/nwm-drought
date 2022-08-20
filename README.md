@@ -19,9 +19,16 @@ $ conda activate nwm-drought
 ```
 
 ## 2. Required shapefiles
-Three directories contain shapefiles used during map creation:
 
-'us_shapefile', 'world_shapefile' : for political boundaries (unzip if necessary)
+All required shapefiles are downloaded/created by running the following script:
+
+```shell
+$ python get-shapefiles.py
+```
+
+Three top-level directories are created and populated with static shapefiles:
+
+'us_shapefile', 'world_shapefile' : for political boundaries
 
 'NHDPlus' : regional stream reach information
 
@@ -57,7 +64,7 @@ For streamflow conditions with various lookbacks (1, 7, 14, 28-day):
 $ python create-nwm-nedews-products.py streamflow
 ```
 
-A top-level 'nwm_drought_indicator_output' directory is created, containing addition directories tagged with YYYYMMDD date format. Inside the date directories, map images for multiple regions are saved.
+A top-level 'nwm_drought_indicator_output' directory is created, containing additional directories tagged with YYYYMMDD date format. Inside the date directories, map images for multiple regions are saved.
 
 An additional 'current' directory inside 'nwm_drought_indicator_output' holds the most recent maps created.
 

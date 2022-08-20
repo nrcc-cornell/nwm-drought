@@ -20,6 +20,9 @@
 		state_list : list : list of state names. These state borders will be displayed on map.
 		bbox_keys : list : list of regions run separate maps for. Bounding boxes
 			for each region is provided from these keys in getBbox function.
+		streamflow_summary_lengths : list : lookbacks to analyze for streamflow (days)
+		soilm_summary_lengths : list : lookbacks to analyze for soil moisture (days)
+			- soilm_summary_lengths is typically 1 for comparing current soilm to climatology.
 		miss : int : missing value identifier
 
 	Usage:
@@ -42,13 +45,13 @@ from matplotlib.patches import Polygon
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib import cm
 from matplotlib.colors import LinearSegmentedColormap
-from MPLColorHelper import MplColorHelper
 
-### must set PROJ_LIB manually for basemap to work ... should find out where to auto-activate
-### in conda environment
-#os.environ["PROJ_LIB"]="/home/bnb2/anaconda3/envs/nrcc-nedews/lib/python2.7/site-packages/pyproj/data"
-os.environ["PROJ_LIB"]="/home/bnb2/anaconda3/envs/nwm-test/lib/python2.7/site-packages/pyproj/data"
+### If using conda environment ... setting PROJ_LIB manually for basemap to work
+if 'CONDA_PREFIX' in os.environ:
+	conda_prefix = os.environ['CONDA_PREFIX']
+	os.environ["PROJ_LIB"]=conda_prefix+"/lib/python2.7/site-packages/pyproj/data"
 from mpl_toolkits.basemap import Basemap
 
 ######################################
@@ -69,6 +72,10 @@ state_list = ['West Virginia','Maine','Massachusetts','Pennsylvania','Connecticu
 	'New Jersey','New York','Delaware','Maryland','New Hampshire','Vermont']
 ### image bboxs to create
 bbox_keys = ['ne','nedews','ny','vt','me','nh','ma','ct','ri']
+### streamflow summary lengths (lookback in days)
+streamflow_summary_lengths = [1,7,14,28]
+### soil moisture summary lengths (typically 1, just comparing current soil moisture to climatology)
+soilm_summary_lengths = [1]
 ### missing value (not scaled)
 miss = -999900
 
@@ -92,10 +99,9 @@ else:
 
 ### determine summaries to perform, based on variable
 # streamflow: 1,7,14,28-day lookbacks
-if varname=='streamflow': summary_lengths = [1,7,14,28]
-#if varname=='streamflow': summary_lengths = [1]
+if varname=='streamflow': summary_lengths = streamflow_summary_lengths
 # SOIL_M: 1-day
-if varname=='SOIL_M': summary_lengths = [1]
+if varname=='SOIL_M': summary_lengths = soilm_summary_lengths
 ### modify outdir, adding another directory for this date and method
 outdirWithFolder = outdir+YYYYMMDD+'_method1/'
 
@@ -128,24 +134,27 @@ if pngFileExistsForDate: sys.exit()
 ######################################
 ### Functions
 ######################################
+class MplColorHelper:
+
+	def __init__(self, cmap_name, start_val, stop_val):
+		self.cmap_name = cmap_name
+		self.cmap = plt.get_cmap(cmap_name)
+		self.norm = matplotlib.colors.Normalize(vmin=start_val, vmax=stop_val)
+		self.scalarMap = cm.ScalarMappable(norm=self.norm, cmap=self.cmap)
+
+	def get_rgb(self, val):
+		return self.scalarMap.to_rgba(val)
+
 def getBbox(s):
 	bbox = None
-	#m = Basemap(llcrnrlat=37.0,urcrnrlat=48.0,llcrnrlon=-83.0,urcrnrlon=-66.5,resolution='h')
 	if s=='ne': bbox=[-83.0, 37.0, -66.5, 48.0]
 	if s=='nedews': bbox=[-80.2, 40.2, -66.6, 47.7]
-	#if s=='ny': bbox=[-79.90, 40.45, -71.80, 45.05]
 	if s=='ny': bbox=[-80.50, 40.40, -71.10, 45.20]
-	#if s=='vt': bbox=[-74.00, 42.50, -71.20, 45.25]
 	if s=='vt': bbox=[-74.00, 42.50, -71.20, 45.70]
-	#if s=='me': bbox=[-72.00, 42.75, -66.85, 47.60]
 	if s=='me': bbox=[-72.00, 42.75, -66.35, 48.10]
-	#if s=='nh': bbox=[-72.75, 42.50, -70.25, 45.50]
 	if s=='nh': bbox=[-73.10, 42.40, -69.90, 45.60]
-	#if s=='ma': bbox=[-73.75, 41.20, -69.75, 43.00]
 	if s=='ma': bbox=[-73.75, 41.20, -69.75, 43.40]
-	#if s=='ct': bbox=[-73.75, 40.75, -71.25, 42.25]
 	if s=='ct': bbox=[-74.00, 40.75, -71.25, 42.50]
-	#if s=='ri': bbox=[-72.50, 41.00, -70.50, 42.25]
 	if s=='ri': bbox=[-72.50, 41.00, -70.50, 42.50]
 	return bbox
 
@@ -161,10 +170,8 @@ def getDatasetName(v):
 def GetRelativeStreamflowColor(info,data):
 	key = info['COMID']
 	if key in data:
-		#print data[key],CMap.get_rgb(data[key])
 		return CMap.get_rgb(data[key])
 	return (1.0, 1.0, 1.0, 1.0)
-	#return (0.0, 1.0, 0.0, 1.0)
 
 def GetStreamflowColor(info,data):
 	c = (0.0, 1.0, 0.0, 1.0)
@@ -179,7 +186,6 @@ def GetRelativeStreamflowColor2(info,data,levs,cols):
 			if data[key]>=levs[idx] and data[key]<levs[idx+1]:
 				return cols[idx]
 	return (1.0, 1.0, 1.0, 1.0)
-	#return (0.0, 1.0, 0.0, 1.0)
 
 ######################################
 ### MAIN
@@ -238,7 +244,6 @@ for per in summary_lengths:
 		######################################
 		### save period average for this year to clim list
 		######################################
-		#print 'period_ave shape for '+thisdate+', period lenth '+str(per)+' : ',period_ave.shape
 		data_clim.append(period_ave[:])
 		del period_ave
 
@@ -509,7 +514,8 @@ outdirList = os.listdir(outdir)
 # list of existing output directories, by day
 dailyOutputList = [ item for item in outdirList if item.split('_')[0][:2]=='20' and item.split('_')[1]=='method1' ]
 # filter list of output directories to only contain directories that have all expected output files
-dailyOutputList = [ item for item in dailyOutputList if len(os.listdir(outdir+item))==72 ]
+numExpectedImageProducts = int(len(bbox_keys)*len(soilm_summary_lengths)*4 + len(bbox_keys)*len(streamflow_summary_lengths))
+dailyOutputList = [ item for item in dailyOutputList if len(os.listdir(outdir+item))==numExpectedImageProducts ]
 # populate the 'current' directory with maps from the latest complete directory
 if len(dailyOutputList)!=0:
 	dailyOutputList.sort()
