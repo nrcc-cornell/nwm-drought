@@ -44,17 +44,14 @@ vars_chrtout=['streamflow']
 #vars_ldasout=['SOIL_M','ACCET']
 vars_ldasout=['SOIL_M']
 ### location to store subset NWM files
-#outdir = '/home/bnb2/nedews-nwm/nwm_subset_ne_historical/'
 outdir = 'nwm_retro_data/'
 ### lcoation to store full downloaded NWM files temporarily
-#tmpdir = '/home/bnb2/nedews-nwm/workspace/'
 tmpdir = 'workspace/'
 ### number of days in period of interest to retrieve retro output each year.
 # Our longest lookback for products is 28 days. Add a few days as cushion in
 # case data source is temporarily unavailable. Data are rotated off as to only
 # maintain a data window of this size, relative to current date.
-#numdays_in_period = 33
-numdays_in_period = 4
+numdays_in_period = 33
 
 ######################################
 ### Functions
