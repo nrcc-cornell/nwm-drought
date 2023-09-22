@@ -50,7 +50,7 @@ filesToDownload = {
 	},
 	'NHDPlus':{
 		'files':[
-			'https://edap-ow-data-commons.s3.amazonaws.com/NHDPlusV21/Data/NationalData/NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z'
+			'http://www.horizon-systems.com/NHDPlusData/NHDPlusV21/Data/NationalData/NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z'
 		]
 	}
 }

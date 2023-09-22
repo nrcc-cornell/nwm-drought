@@ -187,6 +187,15 @@ def GetRelativeStreamflowColor2(info,data,levs,cols):
 				return cols[idx]
 	return (1.0, 1.0, 1.0, 1.0)
 
+def removeVersionDifferences(np_arr):
+	'''
+		Remove 4 ids that were removed from NWM when they switched from v2.2 to v3.0
+	'''
+	if len(np_arr) == 2776738:
+		return np.delete(np_arr, [498970,498971,498972,498973])
+	else:
+		return np_arr
+
 ######################################
 ### MAIN
 ######################################
@@ -235,7 +244,9 @@ for per in summary_lengths:
 			ncfilename = 'NEUS_'+perdate+'1200.'+dstype+'_DOMAIN1.comp'
 			ncfile = Dataset(indir_retro+ncfilename,'r')
 			if varname=='SOIL_M' or varname=='SOIL_W': data_period.append(ncfile.variables[varname][0,:,:,:])
-			if varname=='streamflow' or varname=='qBucket': data_period.append(ncfile.variables[varname][:])
+			if varname=='streamflow' or varname=='qBucket':
+				dp_vals = removeVersionDifferences(ncfile.variables[varname][:])
+				data_period.append(dp_vals)
 			ncfile.close()
 		data_period = np.array(data_period)
 		period_ave = np.average(data_period,axis=0)
@@ -276,11 +287,13 @@ for per in summary_lengths:
 			ncfilename = 'NEUS_'+perdate+'_nwm.t12z.analysis_assim.channel_rt.tm00.conus.nc'
 		ncfile = Dataset(indir_oper+ncfilename,'r')
 		proj4_string = ncfile.getncattr('proj4')
-		if varname=='streamflow' or varname=='qBucket': feature_idsa = np.array(ncfile.variables['feature_id'])
 		if varname=='SOIL_M' or varname=='SOIL_W': x = ncfile.variables['x'][:]
 		if varname=='SOIL_M' or varname=='SOIL_W': y = ncfile.variables['y'][:]
 		if varname=='SOIL_M' or varname=='SOIL_W': data_period.append(ncfile.variables[varname][0,:,:,:])
-		if varname=='streamflow' or varname=='qBucket': data_period.append(ncfile.variables[varname][:])
+		if varname=='streamflow' or varname=='qBucket':
+			feature_idsa = removeVersionDifferences(np.array(ncfile.variables['feature_id']))
+			dp_vals = removeVersionDifferences(ncfile.variables[varname][:])
+			data_period.append(dp_vals)
 		ncfile.close()
 	data_period = np.array(data_period)
 	data_event = np.average(data_period,axis=0)
