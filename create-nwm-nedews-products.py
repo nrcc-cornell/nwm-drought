@@ -63,10 +63,13 @@ if datetime.datetime.today().strftime('%m%d')>='0315':
 else:
 	clim_year_range = ('1980','2020')
 ### location of model output files
-indir_retro = 'nwm_retro_data/'
-indir_oper = 'nwm_oper_data/'
+indir_retro = '/home/nrcc_user/projects/nwm-drought-main/nwm_retro_data/'
+indir_oper = '/home/nrcc_user/projects/nwm-drought-main/nwm_oper_data/'
+indir_world_shp = '/home/nrcc_user/projects/nwm-drought-main/world_shapefile/'
+indir_us_shp = '/home/nrcc_user/projects/nwm-drought-main/us_shapefile/'
+indir_nhdplus = '/home/nrcc_user/projects/nwm-drought-main/NHDPlus/'
 ### location of output png files
-outdir = 'nwm_drought_indicator_output/'
+outdir = '/home/nrcc_user/projects/nwm-drought-main/nwm_drought_indicator_output/'
 ### state list
 state_list = ['West Virginia','Maine','Massachusetts','Pennsylvania','Connecticut','Rhode Island',
 	'New Jersey','New York','Delaware','Maryland','New Hampshire','Vermont']
@@ -156,6 +159,7 @@ def getBbox(s):
 	if s=='ma': bbox=[-73.75, 41.20, -69.75, 43.40]
 	if s=='ct': bbox=[-74.00, 40.75, -71.25, 42.50]
 	if s=='ri': bbox=[-72.50, 41.00, -70.50, 42.50]
+	if s=='wv': bbox=[-83.00, 37.00, -77.50, 40.80]
 	return bbox
 
 def getDatasetName(v):
@@ -328,7 +332,7 @@ for per in summary_lengths:
 
 		### plot soil moisture percentiles
 		if varname=='SOIL_M' or varname=='SOIL_W':
-			input_shapefile = 'us_shapefile/st99_d00'
+			input_shapefile = indir_us_shp+'st99_d00'
 			varlen=4
 			for varidx in range(varlen):
 
@@ -353,7 +357,7 @@ for per in summary_lengths:
 				### load the shapefiles, draw on map
 				ax = plt.gca()
 
-				world_shp_info = m.readshapefile('world_shapefile/CNTR_2014_10M_SH/Data/CNTR_RG_10M_2014','world',drawbounds=False)
+				world_shp_info = m.readshapefile(indir_world_shp+'CNTR_2014_10M_SH/Data/CNTR_RG_10M_2014','world',drawbounds=False)
 				for shapedict,state in zip(m.world_info, m.world):
 					if shapedict['CNTR_ID'] not in ['CA', 'MX']: continue
 					poly = Polygon(state,facecolor='white',edgecolor='white')
@@ -435,8 +439,8 @@ for per in summary_lengths:
 
 		### plot streamflow percentiles
 		if varname=='streamflow':
-			input_shapefile = 'us_shapefile/st99_d00.shp'
-			inshape = 'NHDPlus/NHDFlowline_Network_'+bbox_key+'.shp'
+			input_shapefile = indir_us_shp+'st99_d00.shp'
+			inshape = indir_nhdplus+'NHDFlowline_Network_'+bbox_key+'.shp'
 			shp_10k = fiona.open(inshape, 'r')
 			mp_10k = MultiLineString([shape(line['geometry']) for line in shp_10k])
 			shp_states = fiona.open(input_shapefile, 'r')

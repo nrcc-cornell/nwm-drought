@@ -39,9 +39,11 @@ vars_channel=['streamflow']
 ### variables from LAND. Dataset will only contain these variables (plus dimensions).
 vars_land=['SOIL_M']
 ### location to store subset NWM files
-outdir = 'nwm_oper_data'
+#outdir = 'nwm_oper_data'
+outdir = '/home/nrcc_user/projects/nwm-drought-main/nwm_oper_data'
 ### lcoation to store full downloaded NWM files temporarily
-tmpdir = 'workspace'
+#tmpdir = 'workspace'
+tmpdir = '/home/nrcc_user/projects/nwm-drought-main/workspace'
 
 ######################################
 ### Functions

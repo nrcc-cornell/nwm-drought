@@ -44,9 +44,11 @@ vars_chrtout=['streamflow']
 #vars_ldasout=['SOIL_M','ACCET']
 vars_ldasout=['SOIL_M']
 ### location to store subset NWM files
-outdir = 'nwm_retro_data/'
+#outdir = 'nwm_retro_data/'
+outdir = '/home/nrcc_user/projects/nwm-drought-main/nwm_retro_data/'
 ### lcoation to store full downloaded NWM files temporarily
-tmpdir = 'workspace/'
+#tmpdir = 'workspace/'
+tmpdir = '/home/nrcc_user/projects/nwm-drought-main/workspace/'
 ### number of days in period of interest to retrieve retro output each year.
 # Our longest lookback for products is 28 days. Add a few days as cushion in
 # case data source is temporarily unavailable. Data are rotated off as to only
