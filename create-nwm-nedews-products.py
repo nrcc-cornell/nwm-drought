@@ -74,7 +74,7 @@ outdir = '/home/nrcc_user/projects/nwm-drought-main/nwm_drought_indicator_output
 state_list = ['West Virginia','Maine','Massachusetts','Pennsylvania','Connecticut','Rhode Island',
 	'New Jersey','New York','Delaware','Maryland','New Hampshire','Vermont']
 ### image bboxs to create
-bbox_keys = ['ne','nedews','ny','vt','me','nh','ma','ct','ri']
+bbox_keys = ['ne','nedews','ny','vt','me','nh','ma','ct','ri','wv']
 ### streamflow summary lengths (lookback in days)
 streamflow_summary_lengths = [1,7,14,28]
 ### soil moisture summary lengths (typically 1, just comparing current soil moisture to climatology)
@@ -245,7 +245,7 @@ for per in summary_lengths:
 			dt_next = dt_date - datetime.timedelta(days=i)
 			perdate = dt_next.strftime('%Y%m%d')
 			### extract variable for this data and append to list
-			ncfilename = 'NEUS_'+perdate+'1200.'+dstype+'_DOMAIN1.comp'
+			ncfilename = 'NEUS_'+perdate+'1200.'+dstype+'_DOMAIN1'
 			ncfile = Dataset(indir_retro+ncfilename,'r')
 			if varname=='SOIL_M' or varname=='SOIL_W': data_period.append(ncfile.variables[varname][0,:,:,:])
 			if varname=='streamflow' or varname=='qBucket':

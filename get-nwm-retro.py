@@ -73,7 +73,7 @@ def checkFileExists(ftype,day,hour='12',destdir='./'):
 		destdir : directory to write data to
 	'''
 	yr = day[:4]
-	fname = 'NEUS_'+day+hour+'00.'+ftype+'_DOMAIN1.comp'
+	fname = 'NEUS_'+day+hour+'00.'+ftype+'_DOMAIN1'
 	savedFiles = os.listdir(destdir)
 	return fname in savedFiles
 
@@ -86,8 +86,8 @@ def downloadNWM(ftype,day,hour='12',destdir='./'):
 		destdir : directory to write data to
 	'''
 	yr = day[:4]
-	fname = day+hour+'00.'+ftype+'_DOMAIN1.comp'
-	cmd = 'aws s3 cp s3://noaa-nwm-retrospective-2-1-pds/model_output/'+yr+'/'+fname+' '+destdir+' --no-sign-request --only-show-errors'
+	fname = day+hour+'00.'+ftype+'_DOMAIN1'
+	cmd = 'aws s3 cp s3://noaa-nwm-retrospective-3-0-pds/CONUS/netcdf/'+yr+'/'+fname+' '+destdir+' --no-sign-request --only-show-errors'
 	res = os.system(cmd)
 	return fname
 
@@ -99,7 +99,7 @@ def removeNWM(ftype,day,hour='12',locdir='./'):
 		hour : hour to get file for as string HH
 		locdir : directory where file exists
 	'''
-	fname = day+hour+'00.'+ftype+'_DOMAIN1.comp'
+	fname = day+hour+'00.'+ftype+'_DOMAIN1'
 	if os.path.exists(locdir+fname): res = os.remove(locdir+fname)
 	return
 
@@ -164,6 +164,8 @@ while thisdate <= edate:
 		dt_next = dt_date + datetime.timedelta(days=1)
 		thisdate = dt_next.strftime('%Y%m%d')
 		continue
+
+	print thisdate
 
 	######################################
 	### SUBSET CHRTOUT FILE (retain streamflow,qBtmVertRunoff for NEUS)
