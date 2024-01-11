@@ -87,7 +87,7 @@ def downloadNWM(ftype,day,hour='12',destdir='./'):
 	'''
 	yr = day[:4]
 	fname = day+hour+'00.'+ftype+'_DOMAIN1'
-	cmd = 'aws s3 cp s3://noaa-nwm-retrospective-3-0-pds/CONUS/netcdf/'+yr+'/'+fname+' '+destdir+' --no-sign-request --only-show-errors'
+	cmd = 'aws s3 cp s3://noaa-nwm-retrospective-3-0-pds/CONUS/netcdf/'+ftype+'/'+yr+'/'+fname+' '+destdir+' --no-sign-request --only-show-errors'
 	res = os.system(cmd)
 	return fname
 
@@ -164,8 +164,6 @@ while thisdate <= edate:
 		dt_next = dt_date + datetime.timedelta(days=1)
 		thisdate = dt_next.strftime('%Y%m%d')
 		continue
-
-	print thisdate
 
 	######################################
 	### SUBSET CHRTOUT FILE (retain streamflow,qBtmVertRunoff for NEUS)
