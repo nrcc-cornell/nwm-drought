@@ -241,7 +241,10 @@ for per in summary_lengths:
 		data_period = []
 		for i in range(per):
 			### change to day i within period
-			dt_date = datetime.datetime.strptime(thisdate,'%Y%m%d')
+			if thisdate[4:] == '0229' and int(thisdate[:4]) % 4 != 0:
+				dt_date = datetime.datetime.strptime(thisdate[:4] + '0301','%Y%m%d')
+			else:
+				dt_date = datetime.datetime.strptime(thisdate,'%Y%m%d')
 			dt_next = dt_date - datetime.timedelta(days=i)
 			perdate = dt_next.strftime('%Y%m%d')
 			### extract variable for this data and append to list
