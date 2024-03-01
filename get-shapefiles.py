@@ -31,7 +31,8 @@ regions = {
 	'nh':{'bbox':[-73.10, 42.40, -69.90, 45.60]},
 	'ma':{'bbox':[-73.75, 41.20, -69.75, 43.40]},
 	'ct':{'bbox':[-74.00, 40.75, -71.25, 42.50]},
-	'ri':{'bbox':[-72.50, 41.00, -70.50, 42.50]}
+	'ri':{'bbox':[-72.50, 41.00, -70.50, 42.50]},
+	'wv': {'bbox': [-83.00, 37.00, -77.50, 40.80]}
 }
 
 ### URLs for data to download. Files will be downloaded to directories with key names.
@@ -50,7 +51,9 @@ filesToDownload = {
 	},
 	'NHDPlus':{
 		'files':[
-			'https://edap-ow-data-commons.s3.amazonaws.com/NHDPlusV21/Data/NationalData/NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z'
+			### OLD SOURCE ###
+			# 'https://edap-ow-data-commons.s3.amazonaws.com/NHDPlusV21/Data/NationalData/NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z'
+			'https://dmap-data-commons-ow.s3.amazonaws.com/NHDPlusV21/Data/NationalData/NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z'
 		]
 	}
 }
