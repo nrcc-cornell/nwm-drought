@@ -71,8 +71,8 @@ def downloadNWM(ftype,day,hour='12',lookback='00',destdir='./'):
 		destdir : directory to write data to
 	'''
 	fname = 'nwm.t'+hour+'z.analysis_assim.'+ftype+'.tm'+lookback+'.conus.nc'
-	#cmd = 'wget -q -P '+destdir+' https://nomads.ncep.noaa.gov/pub/data/nccf/com/nwm/prod/nwm.'+day+'/analysis_assim/'+fname
-	cmd = 'wget -q -P '+destdir+' ftp://ftpprd.ncep.noaa.gov/pub/data/nccf/com/nwm/prod/nwm.'+day+'/analysis_assim/'+fname
+	cmd = 'wget --no-check-certificate -q -P '+destdir+' https://nomads.ncep.noaa.gov/pub/data/nccf/com/nwm/prod/nwm.'+day+'/analysis_assim/'+fname
+	# cmd = 'wget -q -P '+destdir+' ftp://ftpprd.ncep.noaa.gov/pub/data/nccf/com/nwm/prod/nwm.'+day+'/analysis_assim/'+fname
 	res = os.system(cmd)
 	return fname
 
@@ -107,13 +107,18 @@ else:
 	# provided day from command line argument
 	YYYYMMDD = sys.argv[1] if (type(sys.argv[1]) is str) else str(sys.argv[1])
 
-### Check if files already exist
-filesExist = checkForFiles(YYYYMMDD)
-if filesExist: sys.exit()
+# get yesterday date
+dt_yesterday = datetime.datetime.strptime(YYYYMMDD,'%Y%m%d') - datetime.timedelta(days=1)
+yesterdaydate = dt_yesterday.strftime('%Y%m%d')
+
+### Check if yesterday and today files already exist
+yesterdayExists = checkForFiles(yesterdaydate)
+todayExists = checkForFiles(YYYYMMDD)
+if yesterdayExists and todayExists: sys.exit()
 
 ### loop through days between start and end dates
-sdate = YYYYMMDD
-edate = YYYYMMDD
+sdate = YYYYMMDD if yesterdayExists else yesterdaydate
+edate = yesterdaydate if todayExists else YYYYMMDD
 thisdate = sdate
 while thisdate <= edate:
 
@@ -178,7 +183,16 @@ while thisdate <= edate:
 	dt_next = dt_date + datetime.timedelta(days=1)
 	thisdate = dt_next.strftime('%Y%m%d')
 
-### Make sure files now exist
-filesExist = checkForFiles(YYYYMMDD)
-if not filesExist: sys.exit('ERROR: files for '+YYYYMMDD+' were not downloaded')
+### Make sure both files now exist
+yesterdayExists = checkForFiles(yesterdaydate)
+todayExists = checkForFiles(YYYYMMDD)
+dts = None
+if not yesterdaydate and not todayExists:
+	dts = YYYYMMDD + ' and ' + yesterdaydate
+elif not yesterdayExists:
+	dts = yesterdaydate
+elif not todayExists:
+	dts = YYYYMMDD
+
+if dts: sys.exit('ERROR: files for '+dts+' were not downloaded')
 
