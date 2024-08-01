@@ -18,8 +18,8 @@ primary_region = 'ewr'
   processes = ['app']
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
+  memory = '6gb'
+  cpu_kind = 'performance'
   cpus = 1
 
 [env]
