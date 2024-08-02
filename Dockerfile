@@ -15,4 +15,5 @@ COPY ./lib /lib
 USER 1000:1000
 
 # Allow job to run for 35 minutes
+# ENTRYPOINT ["python", "main.py"]
 ENTRYPOINT ["/tired-manager", "--job-time=2100"]

@@ -15,6 +15,7 @@ import sys
 import os
 import shutil
 import gzip
+from zoneinfo import ZoneInfo
 
 import config
 
@@ -53,8 +54,8 @@ def get_date(args):
     # provided day from command line argument
     YYYYMMDD = args[1] if (type(args[1]) is str) else str(args[1])
   else:
-    # current day
-    YYYYMMDD = datetime.datetime.today().strftime('%Y%m%d')
+    # current day, accounting for server being in GMT while files/cron trigger being in ExT
+    YYYYMMDD = datetime.datetime.now(ZoneInfo('US/Eastern')).strftime('%Y%m%d')
 
   # Analyses for dates before Mar 15 will only include retro output for 1979.
   if YYYYMMDD[-4:]>='0315':

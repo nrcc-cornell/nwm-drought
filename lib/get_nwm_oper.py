@@ -41,7 +41,7 @@ def get_nwm_oper(config, YYYYMMDD):
 		######################################
 		ncfilename = download_nwm('channel_rt',thisdate,hour=config.hour,lookback=config.lookback,destdir=config.temp_dir)
 		ncfilename_out = f'NEUS_{thisdate}_{ncfilename}'
-		uncropped = xr.open_dataset(os.path.join(config.temp_dir, ncfilename))
+		uncropped = xr.open_dataset(os.path.join(config.temp_dir, ncfilename), engine='netcdf4')
 		cropped = uncropped.where(uncropped['feature_id'].isin(streamflow_ids), drop=True)[['streamflow']]
 		cropped.to_netcdf(os.path.join(config.oper_data_dir, ncfilename_out))
 		remove_nwm('channel_rt',hour=config.hour,lookback=config.lookback,locdir=config.temp_dir)

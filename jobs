@@ -1,6 +1,4 @@
 / echo Done
 /slow sleep 5
 /veryslow sleep 600
-/veryveryslow sleep 60000
 /build /usr/local/bin/python3 main.py
-
