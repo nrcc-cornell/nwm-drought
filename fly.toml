@@ -26,7 +26,7 @@ primary_region = 'ewr'
   CF_ACCOUNT_ID = '37af3c839010fdd20c8856fda97a5d85'
   R2_BUCKET_NAME = 'nwm-drought'
   S3_BUCKET_NAME = 'nedews.nrcc.cornell.edu'
-  S3_PREFIX = 'NWM_maps_v2'
+  S3_PREFIX = 'NWM_maps'
   MPLCONFIGDIR = '/nwm_drought_volume/.config/matplotlib'
 
 [[mounts]]
