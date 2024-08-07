@@ -102,11 +102,11 @@ def main():
   output_dirs_to_keep = []
   for i in range(3):
     output_dirs_to_keep.append((datetime.datetime.strptime(YYYYMMDD, '%Y%m%d') - datetime.timedelta(days=i)).strftime('%Y%m%d') + '_method1')
-  output_dirs = os.listdir(config.output_dir)
-  output_dirs.sort()
-  for output_dir in output_dirs:
-    if output_dir not in output_dirs_to_keep:
-      shutil.rmtree(output_dir)
+  product_dirs = os.listdir(config.output_dir)
+  product_dirs.sort()
+  for product_dir in product_dirs:
+    if product_dir not in output_dirs_to_keep:
+      shutil.rmtree(os.path.join(config.output_dir, product_dir))
 
 
 if __name__ == '__main__':
