@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  nwm_drought:
+    image: nwm_drought:1
+    command: bash
+    tmpfs:
+      - /.config
+      - /.cache
+    volumes:
+      - ./nwm_drought_volume:/nwm_drought_volume
+    env_file:
+      - .env
