@@ -58,10 +58,10 @@ def get_date(args):
     YYYYMMDD = datetime.datetime.now(ZoneInfo('US/Eastern')).strftime('%Y%m%d')
 
   # Analyses for dates before Mar 15 will only include retro output for 1979.
-  if YYYYMMDD[-4:]>='0315':
-    retro_start_year = '1979'
-  else:
+  if YYYYMMDD[-4:]<'0315' or YYYYMMDD[-4:]>='1230':
     retro_start_year = '1980'
+  else:
+    retro_start_year = '1979'
       
   return YYYYMMDD, retro_start_year
 
