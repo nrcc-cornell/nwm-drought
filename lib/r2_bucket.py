@@ -69,3 +69,18 @@ class R2Bucket:
 
     self.__sync_bucket_directories(local_dir_path, local_dirs, web_dirs, verbose)
     self.__sync_bucket_files(local_dir_path, local_files, web_files, verbose)
+
+
+# # Usage example
+# from dotenv import load_dotenv
+# load_dotenv()
+# example_bucket = R2Bucket(
+#   os.environ['R2_BUCKET_NAME'],
+#   os.environ['CF_ACCOUNT_ID'],
+#   os.environ['AWS_ACCESS_KEY_ID'],
+#   os.environ['AWS_SECRET_ACCESS_KEY']
+# )
+
+# [print(obj.key, obj.last_modified) for obj in example_bucket.bucket.objects.all()]
+# # example_bucket.bucket.download_file('NEUS_20250114_nwm.t12z.analysis_assim.land.tm00.conus.nc', '/media/ben/Games SSD/Linux Stuff/nwm_data/NEUS_20250114_land.nc')
+# # example_bucket.bucket.download_file('NEUS_20250114_nwm.t12z.analysis_assim.channel_rt.tm00.conus.nc', '/media/ben/Games SSD/Linux Stuff/nwm_data/NEUS_20250114_channel_rt.nc')

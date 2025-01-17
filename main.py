@@ -24,6 +24,7 @@ from lib.get_nwm_retro import get_nwm_retro
 from lib.get_nwm_oper import get_nwm_oper
 from lib.create_nwm_nedews_products import create_products
 from lib.s3_bucket import send_to_s3
+from lib.utils import log_errors
 
 # Ensure that the defined directories exists
 def setup(config):
@@ -110,4 +111,9 @@ def main():
 
 
 if __name__ == '__main__':
-  main()
+  try:
+    main()
+  except Exception as e:
+    # Log error to file then propagate it
+    log_errors(e, config.writable_dir, 'error_logs.txt')
+    raise

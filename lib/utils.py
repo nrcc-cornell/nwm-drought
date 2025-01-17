@@ -1,4 +1,5 @@
 import os
+import traceback
 import datetime
 import pyproj
 import requests
@@ -8,6 +9,14 @@ from netCDF4 import Dataset
 import boto3
 from botocore import UNSIGNED
 from botocore.config import Config
+
+### function to log any errors that occur
+def log_errors(error, output_dir, filename):
+	with open(os.path.join(output_dir, filename),'a') as f:
+		f.write('\n----------------------------------------\n')
+		f.write(datetime.datetime.now().strftime("%m-%d-%Y") + '\n')
+		f.write(str(error) + '\n')
+		f.write(traceback.format_exc())
 
 ### function to find index of the closest value in an array
 def find_idx_of_nearest_value(array, value):
